@@ -1,0 +1,104 @@
+tetris
+https://en.wikipedia.org/wiki/Tetris
+
+givens:
+- board is a 20x10 array of cells
+- pieces (defined as arrays of arrays of strings)
+
+task:
+write a function that accepts an array of dictionaries representing pieces and the board column in which they shoud be dropped, and returns a string that represents what the board would look like after all pieces have scrolled all the way to the bottom:
+
+start with:
+
+BOARD_WIDTH = 10
+BOARD_HEIGHT = 20
+PIECES = [
+  [['HHHH']],
+  [['ZZ'],
+   [' ZZ']],
+  [[' SS'],
+   ['SS']],
+  [['BB'],
+   ['BB']],
+  [['L'],
+   ['L'],
+   ['LL']],
+]
+
+def tetris(d):
+  # your code here
+  pass
+
+
+
+
+sample runs:
+
+#1
+
+print(tetris([{piece: 0, column:2}]))
+
+|          |
+|          |
+|          |
+|          |
+|          |
+|          |
+|          |
+|          |
+|          |
+|  HHHH    |
+------------
+
+
+#2
+
+print(tetris([{piece: 2, column:2}, {piece: 0, column: 4}]))
+
+|          |
+|          |
+|          |
+|          |
+|          |
+|          |
+|          |
+|    HHHH  |
+|   SS     |
+|  SS      |
+------------
+
+
+#2
+
+print(tetris([{piece: 2, column:2}, {piece: 0, column: 5}]))
+
+|          |
+|          |
+|          |
+|          |
+|          |
+|          |
+|          |
+|          |
+|   SS     |
+|  SS HHHH |
+------------
+
+
+#3
+
+print(tetris([{piece: 3, column:4}, {piece: 2, column: 2}]))
+
+|          |
+|          |
+|          |
+|          |
+|          |
+|          |
+|          |
+|   SS     |
+|  SSBB    |
+|    BB    |
+------------
+
+etc...
