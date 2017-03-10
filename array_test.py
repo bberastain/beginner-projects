@@ -64,25 +64,3 @@ print '__________________________________'
 print(tetris([{'piece': 0, 'column':7}]))
 print '__________________________________'
 print(tetris([{'piece': 0, 'column':8}]))
-
-#class tetris(object):
-
-#    def __init__(self, input_array):
-#        self.input_array = input_array
-
-
-            # my board is a 13x20 array of arrays before adding the bottom
-            # that means there are 260 arrays
-            # indexed from 0 to 259
-            # every 13th array is a new line (first index [12])
-
-            # i have to account for when they try to put something somewhere it can't go
-            # like on the border line on either side
-            # but to start I'll assume they all are well put
-
-
-            #I'll start at the bottom, go backwards with the indexes
-            #I can use the column to check if anything is in that point at regular distances
-            #Then if nothing is immediately above it it also checks on each side of the nothing
-            #If there is, it goes up another level and does that again,
-            #If there isn't, then it doesn't go up that level and just finishes
