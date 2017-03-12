@@ -7,11 +7,11 @@
 # doesn't work for Z and S yet
 
 # filler arrays
-l = ['|'] # border line
-ws = [' '] # white space
-b = ['-'] # bottom
-nl = ['\n'] # new line
-dl = ['d'] # delete later
+l = ['|']    # border line
+ws = [' ']   # white space
+b = ['-']    # bottom
+nl = ['\n']  # new line
+dl = ['d']   # delete later
 
 PIECES = [
   [['HHHH']],
@@ -26,16 +26,17 @@ PIECES = [
    ['LL']],
 ]
 
+
 def tetris(d):
     # create a blank board
     array = []
-    for row in range(1,21):
+    for row in range(1, 21):
         array.append(l)
-        for i in range(1,11):
+        for i in range(1, 11):
             array.append(ws)
         array.append(l)
         array.append(nl)
-    for i in range(1,13):
+    for i in range(1, 13):
         array.append(b)
     # array length is 272
 
@@ -43,20 +44,22 @@ def tetris(d):
     for entry in d:
         piece_array = PIECES[entry['piece']]
         column = entry['column']
-        al = len(piece_array) # array length
-        while al >= 1: # takes part of a piece individually, not good for Z and S
-            part = piece_array[al-1] # start at the last/bottom part
+        al = len(piece_array)  # array length
+        # takes part of a piece individually, not good for Z and S
+        while al >= 1:
+            part = piece_array[al - 1]  # start at the last/bottom part
             al -= 1
             for string in part:
                 pl = len(string)
             row = 0
             while row < 21:
-                if all(array[row*13 + column + space] is ws for space in range(0,pl)):
+                if all(array[row * 13 + column + space] is ws
+                       for space in range(0, pl)):
                     # if all spaces below the piece are blank, return true
                     row += 1
                 else:
                     array[(row-1)*13 + column] = part
-                    for fill in range(1,pl):
+                    for fill in range(1, pl):
                         array[(row-1)*13 + column + fill] = dl
                     break
 
@@ -71,7 +74,12 @@ def tetris(d):
             string += j
     return string
 
-print(tetris([{'piece': 4, 'column':4},{'piece': 3, 'column':5}, {'piece': 0, 'column':1}]))
-#nice
-print(tetris([{'piece': 4, 'column':4},{'piece': 3, 'column':5}, {'piece': 2, 'column':2}]))
-#dang
+
+print(tetris([{'piece': 4, 'column': 4},
+              {'piece': 3, 'column': 5},
+              {'piece': 0, 'column': 1}]))
+# nice
+print(tetris([{'piece': 4, 'column': 4},
+              {'piece': 3, 'column': 5},
+              {'piece': 2, 'column': 2}]))
+# dang
