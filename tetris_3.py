@@ -1,17 +1,7 @@
-# in this attempt I start at the top and check for white space below
-# more logical than indexing backwards
-# also, don't delete squares until the end, keeps a constant total index
-# instead, place fillers until all pieces are placed
-
-# works for pieces H, B, and L
-# doesn't work for Z and S yet
-
-# filler arrays
-l = ['|']    # border line
-ws = [' ']   # white space
-b = ['-']    # bottom
-nl = ['\n']  # new line
-dl = ['d']   # delete later
+l = ['|']
+ws = [' ']
+b = ['-']
+nl = ['\n']
 
 PIECES = [
   [['HHHH']],
@@ -28,71 +18,91 @@ PIECES = [
 
 
 def create_board():
-    array = []
+    board = []
     for row in range(1, 21):
-        array.append(l)
+        board.append(l)
         for i in range(1, 11):
-            array.append(ws)
-        array.append(l)
-        array.append(nl)
+            board.append(ws)
+        board.append(l)
+        board.append(nl)
     for i in range(1, 13):
-        array.append(b)
-    # array length is 272
-    return array
+        board.append(b)
+    return board
 
 
-def board_to_string(array):
-    # delete dl arrays
-    while dl in array:
-        del array[array.index(dl)]
-
-    # concatenate arrays into a string
+def board_to_string(board):
     string = ''
-    for i in array:
+    for i in board:
         for j in i:
             string += j
     return string
 
 
-def update_board_with_piece(array, entry):
+def update_board_with_piece(board, entry):
     piece_array = PIECES[entry['piece']]
-    column = entry['column']
-    al = len(piece_array)  # array length
-    # takes part of a piece individually, not good for Z and S
+    al = len(piece_array)
+    bottom_row = find_bottom_row(board, entry)
+    while al >= 1:
+        part = piece_array[al - 1]
+        string = part[0]
+        pl = len(string)
+        col = entry['column']
+        string, col, pl = remove_blank(string, col, pl)
+        for index in range(0, pl):
+            board[bottom_row*13 + col + index] = [string[index]]
+        bottom_row -= 1
+        al -= 1
+    return board
+
+
+def find_bottom_row(board, entry):
+    piece_array = PIECES[entry['piece']]
+    al = len(piece_array)
+    bottom_row = 0
     while al >= 1:
         part = piece_array[al - 1]  # start at the last/bottom part
-        for string in part:
-            pl = len(string)
+        string = part[0]
+        pl = len(string)
+        col = entry['column']
         row = 0
+        string, col, pl = remove_blank(string, col, pl)
         while row < 21:
-            if all(array[row * 13 + column + space] is ws
+            if all(board[row * 13 + col + space] is ws
                    for space in range(0, pl)):
                 # if all spaces below the piece are blank, return true
                 row += 1
+            elif bottom_row == 0:
+                bottom_row = row-1
+                break
+            elif bottom_row > row:
+                bottom_row = row
+                break
             else:
-                array[(row-1)*13 + column] = part
-                for fill in range(1, pl):
-                    array[(row-1)*13 + column + fill] = dl
                 break
         al -= 1
+    return bottom_row
+
+
+def remove_blank(string, col, pl):
+    if string[0] == ' ':
+        string = string[1:]
+        col += 1
+        pl -= 1
+    elif string[-1] == ' ':
+        string = string[:-1]
+        pl -= 1
+    else:
+        pass
+    return string, col, pl
 
 
 def tetris(pieces_to_drop):
-    # create a blank board
-    array = create_board()
-
-    # replace blank arrays with pieces
+    board = create_board()
     for entry in pieces_to_drop:
-        update_board_with_piece(array, entry)
+        update_board_with_piece(board, entry)
+    return board_to_string(board)
 
-    return board_to_string(array)
 
-
-print(tetris([{'piece': 4, 'column': 4},
-              {'piece': 3, 'column': 5},
-              {'piece': 0, 'column': 1}]))
-# nice
 print(tetris([{'piece': 4, 'column': 4},
               {'piece': 3, 'column': 5},
               {'piece': 2, 'column': 2}]))
-# dang
