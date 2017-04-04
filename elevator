@@ -1,0 +1,95 @@
+def elevator(floor, direction, buttons):
+    direction = check_direction(floor, direction, buttons)
+    stop = search_inside(floor, direction, buttons)
+    if direction == 'up':
+        stop = search_up(floor, buttons, stop)
+    elif direction == 'down':
+        stop = search_down(floor, buttons, stop)
+    return stop
+
+
+def check_direction(floor, direction, buttons):
+    temp = []
+    for i in buttons:
+        temp.append(int(i[0]))
+    if direction == 'up':
+        for i in temp:
+            if i > floor:
+                return 'up'
+        return 'down'
+    elif direction == 'down':
+        for i in temp:
+            if i < floor:
+                return 'down'
+        return 'up'
+
+
+def top_floor(buttons):
+    temp = []
+    for i in buttons:
+        temp.append(int(i[0]))
+    return max(temp) + 1
+
+
+def search_inside(floor, direction, buttons):
+    temp = []
+    temp1 = []
+    for i in buttons:
+        if i[1] == 'I':
+            temp.append(i)
+    if direction == 'up' and temp != []:
+        for i in temp:
+            if int(i[0]) > floor:
+                temp1.append(int(i[0]))
+        if temp1 != []:
+            return min(temp1)
+        else:
+            return top_floor(buttons)
+    elif direction == 'down' and temp != []:
+        for i in temp:
+            if int(i[0]) < floor:
+                temp1.append(int(i[0]))
+        if temp1 != []:
+            return max(temp1)
+        else:
+            return -1
+    elif direction == 'up' and temp == []:
+        return top_floor(buttons)
+    elif direction == 'down' and temp == []:
+        return -1
+
+
+def search_down(floor, buttons, stop):
+    temp = []
+    temp1 = []
+    for i in buttons:
+        if i[1] == 'D':
+            temp.append(i)
+    for i in temp:
+        if floor > int(i[0]) > stop:
+            temp1.append(int(i[0]))
+    if temp1 != []:
+        return max(temp1)
+    else:
+        return stop
+
+
+def search_up(floor, buttons, stop):
+    temp = []
+    temp1 = []
+    for i in buttons:
+        if i[1] == 'U':
+            temp.append(i)
+    for i in temp:
+        if floor < int(i[0]) < stop:
+            temp1.append(int(i[0]))
+    if temp1 != []:
+        return min(temp1)
+    else:
+        return stop
+
+
+print(elevator(0, 'up', ['5I', '3D', '8U']))   # 5
+print(elevator(5, 'up', ['3D', '8U']))         # 8
+print(elevator(8, 'up', ['3D', '4I']))         # 4
+print(elevator(4, 'down', ['3D']))             # 3
